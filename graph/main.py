@@ -6,10 +6,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import dcoloring, render
 
-WIDTH = 24.0
-HEIGHT = 24.0
-POINTS_PER_DIM = 1000
-FRAMES = 12
+WIDTH = 12.0
+HEIGHT = 12.0
+POINTS_PER_DIM = 512
+FRAMES = 480
 TEMP_DIR = 'temp'
 
 if not os.path.exists(TEMP_DIR):
@@ -22,12 +22,12 @@ x, y = np.ogrid[
 z = x + 1j*y
 
 t = np.arange(0.0, 2*np.pi - 2*np.pi/FRAMES/2, 2*np.pi/FRAMES)
-weight1 = dcoloring.clover(   t          )
-bias1   = dcoloring.clover(   t, -np.pi/2)
-weight2 = dcoloring.clover( 4*t, -np.pi/2)
-bias2   = dcoloring.clover( 4*t          )
-weight3 = dcoloring.clover(16*t          )
-bias3   = dcoloring.clover(16*t, -np.pi/2)
+weight1 = 2*dcoloring.clover(   t          )+1
+bias1   = 2*dcoloring.clover(   t, -np.pi/3)+1
+weight2 = 2*dcoloring.clover( 3*t, -np.pi/3)+1
+bias2   = 2*dcoloring.clover( 3*t          )+1
+weight3 = 2*dcoloring.clover(5*t          )
+bias3   = 2*dcoloring.clover(5*t, -np.pi/2)
 
 #This loop goes over each weight and bias and generates a plot for each
 #These plots are aggregated to make a video showcasing some of the function space
@@ -37,7 +37,7 @@ fig = plt.figure()
 ax = fig.add_subplot(111)
 
 for idx in range(0, len(t)):
-    w = np.exp(weight1[idx] * np.exp(weight2[idx] * np.exp(weight3[idx] * z + bias3[idx]) + bias2[idx]) + bias1[idx])
+    w = np.exp(weight1[idx] * np.log(weight2[idx] * np.exp(z) + bias2[idx]) + bias1[idx])
 
     img = dcoloring.colorize(w, grid=False)
 
