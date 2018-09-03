@@ -6,11 +6,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import dcoloring, render
 
-WIDTH = 16.0
-HEIGHT = 16.0
-POINTS_PER_DIM = 1024
-FRAMES = 120
-FPS = 24
+WIDTH = 12.0
+HEIGHT = 12.0
+POINTS_PER_DIM = 512
+FRAMES = 480
 TEMP_DIR = 'temp'
 
 if not os.path.exists(TEMP_DIR):
@@ -38,7 +37,7 @@ fig = plt.figure()
 ax = fig.add_subplot(111)
 
 for idx in range(0, len(t)):
-    w = np.exp(weight1[idx] * np.exp(weight2[idx] * np.exp(weight3[idx] * z + bias3[idx]) + bias2[idx]) + bias1[idx])
+    w = np.exp(weight1[idx] * np.log(weight2[idx] * np.exp(z) + bias2[idx]) + bias1[idx])
 
     img = dcoloring.colorize(w, grid=False)
 
