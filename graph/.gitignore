@@ -1,6 +1,9 @@
+.idea
 venv
 __pycache__
+out
+*.pyc
 *.png
 *.gif
 *.webm
-*.pyc
+
