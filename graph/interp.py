@@ -47,7 +47,7 @@ cfunctions = [
     # ('Zoomed tan(z^-1)', np.tan(1/z)),
     # ('z^i', np.power(z, 1j)),
     # ('z^-i', np.power(z, -1j)),
-    ('1/(1+e^-x)', 1/(1 + np.exp(-z))),
+    ('(1+e^-x)^-1', 1/(1 + np.exp(-z))),
     ('e^(-e^-x)', np.exp(-np.exp(-z)))
 ]
 
@@ -68,37 +68,37 @@ for func_name, cfunction in cfunctions:
         os.makedirs(TEMP_DIR)
 
     interp = cerp
-    for idx in range(0, len(interp)):
-        w = z * (1.0 - interp[idx]) + cfunction * (interp[idx])
+    # for idx in range(0, len(interp)):
+    w = cfunction
 
-        cfunc_plot = dcoloring.colorize(w, grid=False)
+    cfunc_plot = dcoloring.colorize(w, grid=False)
 
-        ax.clear()
-        ax.imshow(cfunc_plot, extent=(-WIDTH/2, WIDTH/2, -HEIGHT/2, HEIGHT/2))
-        ax.set(xlabel='{:3.0f}%'.format(interp[idx] * 100), title=func_name)
+    ax.clear()
+    ax.imshow(cfunc_plot, extent=(-WIDTH/2, WIDTH/2, -HEIGHT/2, HEIGHT/2))
+    ax.set(xlabel='{:3.0f}%'.format(1.0 * 100), title=func_name)
+    #
+    # # Save frame
+    # print('Rendering frame {0:{2}}/{1:{2}}'.format(idx + 1, FRAMES, int(np.log10(FRAMES) + 1)))
+    # temp_path = '{}/frame.{}.png'.format(TEMP_DIR, idx)
+    # fig.savefig(temp_path, dpi=1600, transparent=True)
+    # file_names.append(temp_path)
+    #
+    # # Resize for aliasing
+    # img = cv2.imread(temp_path)
+    # img = cv2.resize(img, (int(img.shape[1]/4), int(img.shape[0]/4)), interpolation=cv2.INTER_AREA)
+    # cv2.imwrite(temp_path, img)
+    #
+    # # Save image of complete function
+    # if idx == FRAMES - 1:
+    img_path = '{}.png'.format(path)
+    fig.savefig(img_path, dpi=1600, transparent=True)
+    img = cv2.imread(img_path)
+    img = cv2.resize(img, (int(img.shape[1]/4), int(img.shape[0]/4)), interpolation=cv2.INTER_AREA)
+    cv2.imwrite('{}.png'.format(path), img)
 
-        # Save frame
-        print('Rendering frame {0:{2}}/{1:{2}}'.format(idx, FRAMES, int(np.log10(FRAMES) + 1)))
-        temp_path = '{}/frame.{}.png'.format(TEMP_DIR, idx)
-        fig.savefig(temp_path, dpi=600, transparent=True)
-        file_names.append(temp_path)
-
-        # Resize for aliasing
-        img = cv2.imread(temp_path)
-        img = cv2.resize(img, (int(img.shape[1]/3), int(img.shape[0]/3)), interpolation=cv2.INTER_AREA)
-        cv2.imwrite(temp_path, img)
-
-        # Save image of complete function
-        if idx == FRAMES - 1:
-            img_path = '{}.png'.format(path)
-            fig.savefig(img_path, dpi=1600, transparent=True)
-            img = cv2.imread(img_path)
-            img = cv2.resize(img, (int(img.shape[1]/4), int(img.shape[0]/4)), interpolation=cv2.INTER_AREA)
-            cv2.imwrite('{}.png'.format(path), img)
-
-    if BACK_FORTH:
-        file_names = file_names + list(reversed(file_names[1:-1]))
-
-    render.create_webm(path, file_names, fps=FPS, bitrate='8162k')
-    rmtree(TEMP_DIR)
+    # if BACK_FORTH:
+    #     file_names = file_names + list(reversed(file_names[1:-1]))
+    #
+    # render.create_webm(path, file_names, fps=FPS, bitrate='8162k')
+    # rmtree(TEMP_DIR)
     plt.close('all')

@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 from colorsys import hls_to_rgb
 
 # Domain coloring function
