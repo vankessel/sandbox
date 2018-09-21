@@ -2,7 +2,7 @@ import numpy as np
 from colorsys import hls_to_rgb
 
 # Domain coloring function
-def colorize(z, max_sat=0.9, grid_taper=0.02, grid=True):
+def colorize(z, max_sat=0.9, grid_taper=0.02, log_base=2.0, grid=True):
     r = np.abs(z)
     arg = np.angle(z)
     real = np.real(z)
@@ -21,8 +21,10 @@ def colorize(z, max_sat=0.9, grid_taper=0.02, grid=True):
         s = max_sat
 
     log2r = np.log2(r)
+    if log_base != 2.0:
+        log2r /= np.log2(log_base)
 
-    h = (arg)  / (2 * np.pi)
+    h = arg / (2 * np.pi)
     l = (log2r - np.floor(log2r))/5 + 2/5
 
     c = np.vectorize(hls_to_rgb)(h, l, s)

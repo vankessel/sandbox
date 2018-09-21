@@ -53,7 +53,7 @@ cfunctions = [
     ('z^')
 ]
 
-func_name = 'unitcircle^z'
+func_name = 'z^unitcircle'
 print('Processing {}'.format(func_name))
 
 # Perpare plots and function
@@ -69,12 +69,13 @@ path = OUT_DIR + '/' + func_name
 if not os.path.exists(TEMP_DIR):
     os.makedirs(TEMP_DIR)
 
+log_base = np.exp(2*np.pi/6)
 interp = cerp
 for idx in range(0, len(interp)):
     c = ucircle[idx]
-    w = np.power(c, z)
+    w = np.power(z, c)
 
-    cfunc_plot = dcoloring.colorize(w, grid=False)
+    cfunc_plot = dcoloring.colorize(w, log_base=log_base, grid=False)
 
     ax.clear()
     ax.imshow(cfunc_plot, extent=(-WIDTH/2, WIDTH/2, -HEIGHT/2, HEIGHT/2))
