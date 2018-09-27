@@ -79,7 +79,7 @@ for idx in range(0, len(interp)):
 
     ax.clear()
     ax.imshow(cfunc_plot, extent=(-WIDTH/2, WIDTH/2, -HEIGHT/2, HEIGHT/2))
-    ax.set(xlabel='{:3.0f}%'.format(interp[idx] * 100), title='({:5.2f} + {:5.2f}i)^z'.format(np.real(c), np.imag(c)))
+    ax.set(title='z^({:5.2f} + {:5.2f}i)'.format(np.real(c), np.imag(c)))
 
     # Save frame
     print('Rendering frame {0:{2}}/{1:{2}}'.format(idx, FRAMES, int(np.log10(FRAMES) + 1)))

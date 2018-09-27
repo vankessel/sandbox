@@ -45,13 +45,16 @@ cfunctions = [
     # ('tan(z)', np.tan(z)),
     # ('Zoomed sin(z^-1)', np.sin(1/z)),
     # ('Zoomed tan(z^-1)', np.tan(1/z)),
-    ('z^i', np.power(z, 1j)),
-    ('z^-i', np.power(z, -1j)),
-    # ('(1+e^-x)^-1', 1/(1 + np.exp(-z))),
-    # ('e^(-e^-x)', np.exp(-np.exp(-z)))
+    # ('z^i', np.power(z, 1j)),
+    # ('z^-i', np.power(z, -1j)),
+    ('(1+e^-z)^-1', 1/(1 + np.exp(-z))),
+    ('e^(-e^-z)', np.exp(-np.exp(-z))),
+    # ('tanh(z)', np.tanh(z)),
+    # ('tanh(z^-1)', np.tanh(1/z)),
+    ('ln(e^z + 1)', np.log(np.exp(z) + 1))
 ]
 
-log_base = np.exp(2*np.pi/6)
+# log_base = np.exp(2*np.pi/6)
 for func_name, cfunction in cfunctions:
     print('Processing {}'.format(func_name))
 
@@ -72,7 +75,7 @@ for func_name, cfunction in cfunctions:
     for idx in range(0, len(interp)):
         w = z * (1.0 - interp[idx]) + cfunction * (interp[idx])
 
-        cfunc_plot = dcoloring.colorize(w, log_base=log_base, grid=False)
+        cfunc_plot = dcoloring.colorize(w, grid=False)
 
         ax.clear()
         ax.imshow(cfunc_plot, extent=(-WIDTH/2, WIDTH/2, -HEIGHT/2, HEIGHT/2))
