@@ -3,9 +3,10 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import dcoloring
+import cv2
 
-WIDTH = 24.0
-HEIGHT = 24.0
+WIDTH = 16.0
+HEIGHT = 16.0
 POINTS_PER_DIM = 2048
 
 x, y = np.ogrid[
@@ -14,23 +15,19 @@ x, y = np.ogrid[
 ]
 
 fig = plt.figure()
-axes = []
-axes.append(fig.add_subplot(121))
-axes.append(fig.add_subplot(122, sharex=axes[0], sharey=axes[0]))
+ax = fig.add_subplot(111)
 
 z = x + 1j*y
-w = np.log(1/z)
 
 z_img = dcoloring.colorize(z, grid=False)
-w_img = dcoloring.colorize(w, grid=False)
 
-axes[0].set(title='z')
-axes[0].imshow(z_img, extent=(-WIDTH/2,WIDTH/2,-HEIGHT/2,HEIGHT/2))
-axes[1].set(title='w')
-axes[1].imshow(w_img, extent=(-WIDTH/2,WIDTH/2,-HEIGHT/2,HEIGHT/2))
+ax.set(title='z')
+ax.imshow(z_img, extent=(-WIDTH/2,WIDTH/2,-HEIGHT/2,HEIGHT/2))
 
-for ax in axes:
-    ax.set_xlim(-WIDTH/2, WIDTH/2)
-    ax.set_ylim(-HEIGHT/2, HEIGHT/2)
+path  = 'z.png'
+fig.savefig(path, dpi=1600, transparent=True)
 
-plt.show()
+# Resize for aliasing
+img = cv2.imread(path)
+img = cv2.resize(img, (int(img.shape[1]/4), int(img.shape[0]/4)), interpolation=cv2.INTER_AREA)
+cv2.imwrite(path, img)
