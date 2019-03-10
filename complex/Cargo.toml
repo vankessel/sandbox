@@ -1,0 +1,7 @@
+[package]
+name = "complex"
+version = "0.1.0"
+authors = ["Kevin Van Kessel <10148659+vankessel@users.noreply.github.com>"]
+edition = "2018"
+
+[dependencies]
