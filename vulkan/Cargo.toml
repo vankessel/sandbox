@@ -1,0 +1,10 @@
+[package]
+name = "vulkan"
+version = "0.1.0"
+authors = ["Kevin Van Kessel <10148659+vankessel@users.noreply.github.com>"]
+edition = "2018"
+
+[dependencies]
+vulkano = "0.11.1"
+vulkano-shaders = "0.11.1"
+image = "0.21.0"
