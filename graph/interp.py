@@ -84,12 +84,12 @@ for func_name, cfunction in cfunctions:
         # Save frame
         print('Rendering frame {0:{2}}/{1:{2}}'.format(idx + 1, FRAMES, int(np.log10(FRAMES) + 1)))
         temp_path = '{}/frame.{}.png'.format(TEMP_DIR, idx)
-        fig.savefig(temp_path, dpi=1600, transparent=True)
+        fig.savefig(temp_path, dpi=1000, transparent=True)
         file_names.append(temp_path)
 
         # Resize for aliasing
         img = cv2.imread(temp_path)
-        img = cv2.resize(img, (int(img.shape[1]/4), int(img.shape[0]/4)), interpolation=cv2.INTER_AREA)
+        img = cv2.resize(img, (int(img.shape[1]/8), int(img.shape[0]/8)), interpolation=cv2.INTER_AREA)
         cv2.imwrite(temp_path, img)
 
         # Save image of complete function

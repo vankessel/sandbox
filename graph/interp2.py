@@ -7,11 +7,10 @@ import numpy as np
 import cv2
 import dcoloring, render
 
-FILE_NAME = 'exp(z)'
 WIDTH = 16
 HEIGHT = 16
 POINTS_PER_DIM = 2048
-FRAMES = 480
+FRAMES = 390
 FPS = 60
 BACK_FORTH = False
 TEMP_DIR = 'temp2'
@@ -26,7 +25,7 @@ x, y = np.ogrid[
 ]
 z = x + 1j*y
 
-# 0 to 1 inclusive
+# 0 to 1 exclusive
 lerp = np.arange(0.0, 1.0 - 1.0/FRAMES/2, 1.0/FRAMES)
 cerp = dcoloring.cos_interpolation(lerp)
 ucircle = np.exp(2j * np.pi * lerp)
@@ -70,8 +69,7 @@ if not os.path.exists(TEMP_DIR):
     os.makedirs(TEMP_DIR)
 
 log_base = np.exp(2*np.pi/6)
-interp = cerp
-for idx in range(0, len(interp)):
+for idx in range(0, len(ucircle)):
     c = ucircle[idx]
     w = np.power(z, c)
 
@@ -84,12 +82,12 @@ for idx in range(0, len(interp)):
     # Save frame
     print('Rendering frame {0:{2}}/{1:{2}}'.format(idx, FRAMES, int(np.log10(FRAMES) + 1)))
     temp_path = '{}/frame.{}.png'.format(TEMP_DIR, idx)
-    fig.savefig(temp_path, dpi=600, transparent=True)
+    fig.savefig(temp_path, dpi=1000, transparent=True)
     file_names.append(temp_path)
 
     # Resize for aliasing
     img = cv2.imread(temp_path)
-    img = cv2.resize(img, (int(img.shape[1]/3), int(img.shape[0]/3)), interpolation=cv2.INTER_AREA)
+    img = cv2.resize(img, (int(img.shape[1]/8), int(img.shape[0]/8)), interpolation=cv2.INTER_AREA)
     cv2.imwrite(temp_path, img)
 
     # Save image of complete function
@@ -103,6 +101,10 @@ for idx in range(0, len(interp)):
 if BACK_FORTH:
     file_names = file_names + list(reversed(file_names[1:-1]))
 
+print("Rendering {} frames to {}".format(len(file_names), path))
 render.create_webm(path, file_names, fps=FPS, bitrate='8162k')
+render.create_webm(path + ".2", file_names, fps=FPS, bitrate='4096k')
+render.create_webm(path + ".4", file_names, fps=FPS, bitrate='2048k')
+render.create_webm(path + ".8", file_names, fps=FPS, bitrate='1024k')
 rmtree(TEMP_DIR)
 plt.close('all')
