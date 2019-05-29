@@ -52,6 +52,8 @@ cfunctions = [
     # ('tanh(z)', np.tanh(z)),
     # ('tanh(z^-1)', np.tanh(1/z)),
     ('ln(e^z + 1)', np.log(np.exp(z) + 1))
+    # ('gamma(z)', sp.gamma(z)),
+    # ('zeta(z)', sp.zeta(z)),
 ]
 
 # log_base = np.exp(2*np.pi/6)
