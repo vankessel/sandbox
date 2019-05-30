@@ -1,6 +1,7 @@
 import numpy as np
 from colorsys import hls_to_rgb
 
+
 # Domain coloring function
 def colorize(z, max_sat=0.9, grid_taper=0.02, log_base=2.0, grid=True):
     r = np.abs(z)
@@ -32,8 +33,10 @@ def colorize(z, max_sat=0.9, grid_taper=0.02, log_base=2.0, grid=True):
     c = np.flip(c, 0)
     return c
 
+
 def cos_interpolation(x):
     return (1 - np.cos(np.pi * x)) / 2
+
 
 def plateau_curve(x, taper_length=0.05, height=1.0, total_length=1.0):
     conditions = [
@@ -47,6 +50,7 @@ def plateau_curve(x, taper_length=0.05, height=1.0, total_length=1.0):
         lambda x: height * cos_interpolation((total_length - x) / taper_length)
     ]
     return np.piecewise(x, conditions, functions)
+
 
 def clover(theta, offset=0.0):
     return np.cos(2 * theta + offset) * np.exp(theta * 1j)

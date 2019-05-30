@@ -10,7 +10,7 @@ import dcoloring, render
 WIDTH = 16
 HEIGHT = 16
 POINTS_PER_DIM = 2048
-FRAMES = 390
+FRAMES = 480
 FPS = 60
 BACK_FORTH = False
 TEMP_DIR = 'temp2'
@@ -49,7 +49,7 @@ cfunctions = [
     # ('z^i', np.power(z, 1j)),
     # ('z^-i', np.power(z, -1j)),
     # ('z^-2i', np.power(z, -2j))
-    ('z^')
+    # ('z^')
 ]
 
 func_name = 'z^unitcircle'
@@ -102,9 +102,9 @@ if BACK_FORTH:
     file_names = file_names + list(reversed(file_names[1:-1]))
 
 print("Rendering {} frames to {}".format(len(file_names), path))
-render.create_webm(path, file_names, fps=FPS, bitrate='8162k')
-render.create_webm(path + ".2", file_names, fps=FPS, bitrate='4096k')
-render.create_webm(path + ".4", file_names, fps=FPS, bitrate='2048k')
-render.create_webm(path + ".8", file_names, fps=FPS, bitrate='1024k')
+render.create_webm(path + ".8162", file_names, fps=FPS, bitrate='8162k')
+render.create_webm(path + ".2048", file_names, fps=FPS, bitrate='2048k')
+render.create_webm(path + ".1536", file_names, fps=FPS, bitrate='2048k')
+render.create_webm(path + ".1024", file_names, fps=FPS, bitrate='1024k')
 rmtree(TEMP_DIR)
 plt.close('all')
