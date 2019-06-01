@@ -26,7 +26,7 @@ def colorize(z, max_sat=0.9, grid_taper=0.02, log_base=2.0, grid=True):
         log2r /= np.log2(log_base)
 
     h = arg / (2 * np.pi)
-    l = (log2r - np.floor(log2r))/5 + 2/5
+    l = (log2r - np.floor(log2r)) / 5 + 2 / 5
 
     c = np.vectorize(hls_to_rgb)(h, l, s)
     c = np.array(c).swapaxes(0, 2)

@@ -3,6 +3,7 @@ venv
 __pycache__
 out
 *.pyc
+*.jpg
 *.png
 *.gif
 *.webm

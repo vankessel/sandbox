@@ -4,12 +4,14 @@ import os
 from shutil import rmtree
 import matplotlib.pyplot as plt
 import numpy as np
+import scipy.special as sp
 import cv2
 import dcoloring, render
-import scipy.special as sp
+from funcs import *
 
-WIDTH = 16
-HEIGHT = 16
+WIDTH = 12
+HEIGHT = 24
+HEIGHT_OFFSET = 11
 POINTS_PER_DIM = 2048
 FRAMES = 240
 FPS = 60
@@ -21,8 +23,8 @@ if not os.path.exists(OUT_DIR):
     os.makedirs(OUT_DIR)
 
 x, y = np.ogrid[
-    -WIDTH/2:WIDTH/2:POINTS_PER_DIM*1j,
-    -HEIGHT/2:HEIGHT/2:POINTS_PER_DIM*1j
+    -WIDTH/2:WIDTH/2:POINTS_PER_DIM/2*1j,
+    HEIGHT_OFFSET + (-HEIGHT / 2):HEIGHT_OFFSET + (HEIGHT / 2):POINTS_PER_DIM*1j
 ]
 z = x + 1j*y
 
@@ -32,33 +34,33 @@ cerp = dcoloring.cos_interpolation(lerp)
 
 print("Calculating functions")
 cfunctions = [
-    ('exp(z)', np.exp(z)),
-    ('ln(z)', np.log(z)),
-    ('z^3', z*z*z),
-    ('z^2', z*z),
-    ('z^0.5', np.sqrt(z)),
-    ('z^-1', 1/z),
-    ('z^-0.5', 1/np.sqrt(z)),
-    ('z^-2', 1/(z*z)),
-    ('sin(z)', np.sin(z)),
-    ('sinh(z)', np.sinh(z)),
-    ('asin(z)', np.arcsin(z)),
-    ('tan(z)', np.tan(z)),
-    ('atan(z)', np.arctan(z)),
+    ('zeta(z)', zeta(z, E=1e-9)),
+    # ('exp(z)', np.exp(z)),
+    # ('ln(z)', np.log(z)),
+    # ('z^3', z*z*z),
+    # ('z^2', z*z),
+    # ('z^0.5', np.sqrt(z)),
+    # ('z^-1', 1/z),
+    # ('z^-0.5', 1/np.sqrt(z)),
+    # ('z^-2', 1/(z*z)),
+    # ('sin(z)', np.sin(z)),
+    # ('sinh(z)', np.sinh(z)),
+    # ('asin(z)', np.arcsin(z)),
+    # ('tan(z)', np.tan(z)),
+    # ('atan(z)', np.arctan(z)),
     # ('Zoomed sin(z^-1)', np.sin(1/z)),
     # ('Zoomed tan(z^-1)', np.tan(1/z)),
     # ('z^i', np.power(z, 1j)),
     # ('z^-i', np.power(z, -1j)),
-    ('(1+e^-z)^-1', 1/(1 + np.exp(-z))),
-    ('e^(-e^-z)', np.exp(-np.exp(-z))),
-    ('ln(e^z + 1)', np.log(np.exp(z) + 1)),
-    ('ln((e^z + 1) / (e^z - 1))', np.log((np.exp(z) + 1) / (np.exp(z) - 1))),
-    ('gamma(z)', sp.gamma(z)),
-    # ('zeta(z)', sp.zeta(z)),
+    # ('(1+e^-z)^-1', 1/(1 + np.exp(-z))),
+    # ('e^(-e^-z)', np.exp(-np.exp(-z))),
+    # ('ln(e^z + 1)', np.log(np.exp(z) + 1)),
+    # ('ln(e^z + 1) - ln(e^z - 1)', np.log((np.exp(z) + 1) / (np.exp(z) - 1))),
+    # ('gamma(z)', sp.gamma(z)),
 ]
 print("Done")
 
-# log_base = np.exp(2*np.pi/6)
+log_base = 2.0  # np.exp(2*np.pi/6)
 for func_name, cfunction in cfunctions:
     print('Processing {}'.format(func_name))
 
@@ -78,10 +80,10 @@ for func_name, cfunction in cfunctions:
     for idx in range(0, len(interp)):
         w = z * (1.0 - interp[idx]) + cfunction * (interp[idx])
 
-        cfunc_plot = dcoloring.colorize(w, grid=False)
+        cfunc_plot = dcoloring.colorize(w, grid=False, log_base=log_base)
 
         ax.clear()
-        ax.imshow(cfunc_plot, extent=(-WIDTH/2, WIDTH/2, -HEIGHT/2, HEIGHT/2))
+        ax.imshow(cfunc_plot, extent=(-WIDTH/2, WIDTH/2, HEIGHT_OFFSET + (-HEIGHT / 2), HEIGHT_OFFSET + (HEIGHT / 2)))
         ax.set(xlabel='{:3.0f}%'.format(round(interp[idx] * 100)), title=func_name)
 
         # Save frame
